@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Media Parser</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+      }
+
+      .container {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 40px;
+        box-sizing: border-box;
+      }
+
+      .header {
+        text-align: left;
+        margin-bottom: 40px;
+      }
+
+      h1 {
+        font-size: 2.5em;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.1em;
+        color: #666;
+        max-width: 600px;
+        margin: 0;
+      }
+
+      .cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 25px;
+        flex: 1 1 calc(50% - 10px);
+        min-width: 300px;
+        box-sizing: border-box;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
+      }
+
+      .icon {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .icon img {
+        width: 40px;
+        height: 40px;
+        margin-right: 15px;
+        object-fit: contain;
+      }
+
+      .content h3 {
+        margin: 0 0 10px;
+        font-size: 1.4em;
+        color: #333;
+      }
+
+      .content p {
+        margin: 0 0 20px;
+        font-size: 0.9em;
+        color: #666;
+        line-height: 1.5;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8em;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .whatsapp {
+        background: linear-gradient(45deg, #25d366 0%, #128c7e 100%);
+      }
+
+      .instagram {
+        background: linear-gradient(
+          45deg,
+          #405de6 0%,
+          #5851db 25%,
+          #833ab4 50%,
+          #c13584 75%,
+          #e1306c 100%
+        );
+      }
+
+      .facebook {
+        background: linear-gradient(45deg, #3b5998 0%, #4c70ba 100%);
+      }
+
+      .twitter {
+        background: linear-gradient(45deg, #1da1f2 0%, #0e71c8 100%);
+      }
+
+      .google {
+        background: linear-gradient(45deg, #4285f4 0%, #ea4335 100%);
+      }
+
+      @media (max-width: 768px) {
+        .card {
+          flex: 1 1 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>Social Media Parser</h1>
+      </header>
+    </div>
+  </body>
+</html>
+            <p>
+                Connect and analyze data from various social media platforms for
+                comprehensive digital investigations and forensic analysis.
+            </p>
+        </header>
+        <div class="cards-container">
+            <div class="card">
+                <div class="icon">
+                    <img
+                        src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN=w480-h960-rw"
+                        alt="WhatsApp"
+                    />
+                    <h3>WhatsApp</h3>
+                </div>
+                <div class="content">
+                    <p>
+                        Efficiently capture and document chats, call logs, and media from
+                        WhatsApp accounts. Ensure accurate and secure extraction for
+                        forensic analysis.
+                    </p>
+                    <button class="button whatsapp" id="whatsappCard">Connect</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="icon">
+                    <img
+                        src="https://play-lh.googleusercontent.com/8Nu3gtUhArD8efOANJTSAyo9vuM_ZxRHENwHPmgFlVp2bgAzqJyhWpF-jLPF99I2LOao=w480-h960-rw"
+                        alt="Instagram"
+                    />
+                    <h3>Instagram</h3>
+                </div>
+                <div class="content">
+                    <p>
+                        Access and analyze Instagram profiles, posts, stories, and direct
+                        messages. Extract valuable data for social media investigations.
+                    </p>
+                    <button class="button instagram" id="instagramCard">Connect</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="icon">
+                    <img
+                        src="https://play-lh.googleusercontent.com/KCMTYuiTrKom4Vyf0G4foetVOwhKWzNbHWumV73IXexAIy5TTgZipL52WTt8ICL-oIo=s96-rw"
+                        alt="Facebook"
+                    />
+                    <h3>Facebook</h3>
+                </div>
+                <div class="content">
+                    <p>
+                        Retrieve and examine Facebook profiles, timelines, friend lists,
+                        and group activities. Gather crucial information for comprehensive
+                        social media analysis.
+                    </p>
+                    <button class="button facebook" id="facebookCard">Connect</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="icon">
+                    <img
+                        src="https://play-lh.googleusercontent.com/YvIeFtcOu07BNT4gVRmcS9Lq82Tp7Fs2gnFY65T9KGFJDFDx8US7JRSerAoBkG0fDA=w480-h960-rw"
+                        alt="Twitter"
+                    />
+                    <h3>Twitter</h3>
+                </div>
+                <div class="content">
+                    <p>
+                        Collect and analyze tweets, retweets, likes, and follower networks.
+                        Extract valuable data for social media trend analysis and user
+                        profiling.
+                    </p>
+                    <button class="button twitter" id="twitterCard">Connect</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="icon">
+                    <img
+                        src="https://play-lh.googleusercontent.com/aFWiT2lTa9CYBpyPjfgfNHd0r5puwKRGj2rHpdPTNrz2N9LXgN_MbLjePd1OTc0E8Rl1=w480-h960-rw"
+                        alt="Google"
+                    />
+                    <h3>Google</h3>
+                </div>
+                <div class="content">
+                    <p>
+                        Access and analyze Google account data, including emails,
+                        documents, and search history. Extract valuable information for
+                        comprehensive digital investigations.
+                    </p>
+                    <button class="button google" id="googleCard">Connect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("whatsappCard").addEventListener("click", () => {
+            // Add your WhatsApp redirect logic here
+        });
+
+        document.getElementById("instagramCard").addEventListener("click", () => {
+            window.location.href = "instagram.html";
+        });
+
+        document.getElementById("facebookCard").addEventListener("click", () => {
+            window.location.href = "facebook.html";
+        });
+
+              document.getElementById("twitterCard").addEventListener("click", () => {
+            window.location.href = "twitter.html";
+        });
+
+        document.getElementById("googleCard").addEventListener("click", () => {
+            // Add your Google redirect logic here
+        });
+    </script>
+</body>
+</html>

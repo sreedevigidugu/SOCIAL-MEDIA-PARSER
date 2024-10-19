@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instagram Bot</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 400px; /* Adjust the max-width as needed */
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center; /* Center align text and elements inside container */
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Form element styles */
+        form {
+            margin: 0; /* Remove margin */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+        }
+
+        .form-group label {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #999;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 5px;
+            font-size: 12px;
+            color: #007bff;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* Two-factor authentication input */
+        #two-factor-code {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        /* Logs section */
+        #logs {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Instagram Bot</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="text" id="username" name="username" placeholder=" " required />
+                <label for="username">Username</label>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" placeholder=" " required />
+                <label for="password">Password</label>
+            </div>
+            <button type="submit" id="submitBtn">Start Bot</button>
+        </form>
+        <input type="text" id="two-factor-code" placeholder="Enter 2FA Code" style="display: none;" />
+        <button id="submit-2fa-code" style="display: none;">Submit 2FA Code</button>
+        <div id="result"></div>
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const submitButton = document.getElementById("submitBtn");
+            submitButton.disabled = true;
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const result = await ipcRenderer.invoke("start-instagram-bot", {
+                    username,
+                    password,
+                });
+
+                if (result.success) {
+                    document.getElementById("result").innerText = "Bot process completed.";
+                    document.getElementById("loginForm").reset();
+                } else if (result.error && result.error.includes("2FA code required")) {
+                    document.getElementById('two-factor-code').style.display = 'block';
+                    document.getElementById('submit-2fa-code').style.display = 'block';
+                } else {
+                    document.getElementById("result").innerText = "Error: " + result.error;
+                }
+            } catch (error) {
+                document.getElementById("result").innerText = "Unexpected error: " + error.message;
+            }
+
+            submitButton.disabled = false;
+        });
+
+        ipcRenderer.on("update-logs", (event, log) => {
+            const logsDiv = document.getElementById("logs");
+            const logElement = document.createElement("p");
+            logElement.innerText = log;
+            logsDiv.appendChild(logElement);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        });
+
+        ipcRenderer.on('show-2fa-input', () => {
+            document.getElementById('two-factor-code').style.display = 'block';
+            document.getElementById('submit-2fa-code').style.display = 'block';
+        });
+
+        document.getElementById('submit-2fa-code').addEventListener('click', () => {
+            const code = document.getElementById('two-factor-code').value;
+            ipcRenderer.send('submit-2fa-code', code);
+            document.getElementById('two-factor-code').style.display = 'none';
+            document.getElementById('submit-2fa-code').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

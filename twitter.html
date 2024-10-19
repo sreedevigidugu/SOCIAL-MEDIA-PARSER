@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Twitter Bot</title>
+    <style>
+        /* ... (previous styles remain unchanged) ... */
+
+        #verification-input {
+            display: none;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        #submit-verification {
+            display: none;
+            margin-top: 10px;
+        }
+
+        #verification-prompt {
+            display: none;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Twitter Bot</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="text" id="username" name="username" placeholder=" " required />
+                <label for="username">Username*(you have to give your username only)</label>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" placeholder=" " required />
+                <label for="password">Password</label>
+            </div>
+            <button type="submit" id="submitBtn">Start Bot</button>
+        </form>
+        <div id="verification-prompt"></div>
+        <input type="text" id="verification-input" placeholder="Enter verification info" />
+        <button id="submit-verification">Submit Verification</button>
+        <div id="result"></div>
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const submitButton = document.getElementById("submitBtn");
+            submitButton.disabled = true;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const result = await ipcRenderer.invoke("start-twitter-bot", { username, password });
+                handleBotResult(result);
+            } catch (error) {
+                document.getElementById("result").innerText = "Unexpected error: " + error.message;
+            }
+
+            submitButton.disabled = false;
+        });
+
+        function handleBotResult(result) {
+            if (result.success) {
+                document.getElementById("result").innerText = "Bot process completed.";
+                document.getElementById("loginForm").reset();
+            } else {
+                document.getElementById("result").innerText = "Error: " + result.error;
+            }
+        }
+
+        function showVerificationInput(prompt) {
+            document.getElementById('verification-prompt').innerText = prompt;
+            document.getElementById('verification-prompt').style.display = 'block';
+            document.getElementById('verification-input').style.display = 'block';
+            document.getElementById('submit-verification').style.display = 'block';
+        }
+
+        function hideVerificationInput() {
+            document.getElementById('verification-prompt').style.display = 'none';
+            document.getElementById('verification-input').style.display = 'none';
+            document.getElementById('submit-verification').style.display = 'none';
+        }
+
+        document.getElementById('submit-verification').addEventListener('click', () => {
+            const info = document.getElementById('verification-input').value;
+            ipcRenderer.send('submit-verification', info);
+            hideVerificationInput();
+        });
+
+        ipcRenderer.on("update-logs", (event, log) => {
+            const logsDiv = document.getElementById("logs");
+            const logElement = document.createElement("p");
+            logElement.innerText = log;
+            logsDiv.appendChild(logElement);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        });
+
+        ipcRenderer.on('show-verification-input', (event, prompt) => showVerificationInput(prompt));
+    </script>
+</body>
+</html>
